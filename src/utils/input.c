@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:19:18 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/06 19:56:48 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/06 20:23:32 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,21 @@ static long	custom_strtol(const char *str, char **endptr)
 	return (sign * result);
 
 }
-static long	custom_atoi_long(const char *str)
+
+static int	is_valid_number(const char *str)
+{
+	long	val;
+	char	*endptr;
+
+	if (*str == '\0')
+		return (0);
+	if (!is_not_just_whitespace_and_sign(str))
+		return (0);
+	val = custom_strtol(str, &endptr);
+	return (*endptr == '\0' && val >= 0);
+}
+
+long	custom_atoi_long(const char *str)
 {
 	long	result;
 	int		sign;
@@ -80,18 +94,6 @@ static long	custom_atoi_long(const char *str)
 	return (sign * result);
 }
 
-static int	is_valid_number(const char *str)
-{
-	char	*endptr;
-
-	if (*str == '\0')
-		return (0);
-	if (!is_not_just_whitespace_and_sign(str))
-		return (0);
-	custom_strtol(str, &endptr);
-	return (*endptr == '\0');
-}
-
 t_supervisor	*parse_input(int ac, char **av)
 {
 	t_supervisor	*ret;
@@ -108,13 +110,15 @@ t_supervisor	*parse_input(int ac, char **av)
 		|| !is_valid_number(av[3]) || !is_valid_number(av[4]))
 	{
 		free(ret);
-		print_error("One of the arguments is not a number");
+		print_error("One of the arguments is not a number or is negative");
 		exit(1);
 	}
-	ret->number_of_philo = custom_atoi_long(av[1]);
-	ret->time_to_eat = custom_atoi_long(av[2]);
-	ret->time_to_die = custom_atoi_long(av[3]);
-	ret->time_to_sleep = custom_atoi_long(av[4]);
+	init_supervisor_numbers(ret, av);
+	if (ret->has_error)
+	{
+		free(ret);
+		exit(1);
+	}
 	if (ac == 6)
 	{
 		if (!is_valid_number(av[5]))

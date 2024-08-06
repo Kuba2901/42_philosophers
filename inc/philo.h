@@ -10,8 +10,8 @@
 
 typedef enum s_bool
 {
-	TRUE,
-	FALSE
+	FALSE,
+	TRUE
 }	t_bool;
 
 typedef enum s_activity
@@ -23,6 +23,12 @@ typedef enum s_activity
 	FORK
 
 }	t_activity;
+
+typedef struct s_fork
+{
+	pthread_mutex_t	lock;
+	int				index;
+}	t_fork;
 
 typedef struct s_supervisor
 {
@@ -36,9 +42,12 @@ typedef struct s_supervisor
 
 typedef struct s_philo
 {
-	long	index; // Starting with 1
-	long	last_meal; // TS
+	long		index; // Starting with 1
+	long		last_sleep; // TS Since the beginning of last sleeping session
+	long		last_thinking; // TS Since the beginning of last thinking session
+	long		last_meal; // TS Since the beginning of last eating session
 	t_activity	activity; // Current philosopher activity
+	pthread_t	thread;
 }	t_philo;
 
 const char		*get_activity_description(t_activity activity);
@@ -47,4 +56,6 @@ void			print_error(const char *err);
 void			free_resources(t_supervisor *supervisor);
 t_supervisor	*parse_input(int ac, char **av);
 void			debug_print_supervisor_data(t_supervisor supervisor);
+long			custom_atoi_long(const char *str);
+void			init_supervisor_numbers(t_supervisor *super, char **av);
 #endif
