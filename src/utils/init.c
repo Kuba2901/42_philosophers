@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:00:29 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/06 20:56:08 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/07 16:42:44 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ t_fork **init_forks(t_supervisor *super)
     while (++i < super->number_of_philo)
     {
         ret[i] = malloc(sizeof(t_fork));
-        if (!ret[i]) {
+        if (ret[i] == NULL) {
             print_error("Error allocating fork");
             free_until((void **)ret, i);
             return (NULL);

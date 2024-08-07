@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/06 20:53:03 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/07 16:46:35 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ int	main(int ac, char **av)
 
 	super = NULL;
 	super = parse_input(ac, av);
-	init_forks(super);
+	super->forks = init_forks(super);
 	if (super->forks == NULL)
 	{
 		free_resources(super);
 		exit(1);
 	}
-	init_philos(super);
+	super->philos = init_philos(super);
 	if (super->philos == NULL)
 	{
 		free_resources(super);

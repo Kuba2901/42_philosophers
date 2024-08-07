@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:07:11 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/06 20:49:44 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/07 16:44:57 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,16 @@ void	print_error(const char *err)
 
 void	free_resources(t_supervisor *supervisor)
 {
+	int	i;
+
 	if (supervisor != NULL)
 	{
+		if (supervisor->forks != NULL)
+		{
+			i = -1;
+			while (++i < supervisor->number_of_philo)
+				pthread_mutex_destroy(&supervisor->forks[i]->lock);
+		}
 		free_until((void **)supervisor->forks, supervisor->number_of_philo);
 		free_until((void **)supervisor->philos, supervisor->number_of_philo);
 		free(supervisor);
