@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:19:18 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/06 20:55:08 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/07 16:59:39 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ long	custom_atoi_long(const char *str)
 
 static void	init_supervisor(t_supervisor *super)
 {
+	gettimeofday(&super->simulation_start, &super->simulation_timezone);
 	super->forks = NULL;
 	super->philos = NULL;
 	super->has_error = FALSE;

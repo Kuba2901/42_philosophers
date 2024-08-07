@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:07:11 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/07 16:44:57 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/07 17:13:26 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,17 @@ void	free_resources(t_supervisor *supervisor)
 
 void	debug_print_supervisor_data(t_supervisor supervisor)
 {
+	struct timeval	tv_now;
+	struct timezone	tz_now;
+	
 	printf("[*] SUPERVISOR DATA\n");
 	printf("number_of_philo: %ld\n", supervisor.number_of_philo);
 	printf("time_to_die: %ld\n", supervisor.time_to_die);
 	printf("time_to_eat: %ld\n", supervisor.time_to_eat);
 	printf("time_to_sleep: %ld\n", supervisor.time_to_sleep);
 	printf("number_of_meals: %ld\n", supervisor.number_of_meals);
+	printf("Seconds since 1/1/1970: %lu\n",supervisor.simulation_start.tv_sec);
+	gettimeofday(&tv_now, &tz_now);
+	printf("Sim runtime: %lu\n", get_sim_runtime(&supervisor).tv_sec);
 	printf("\n");
 }

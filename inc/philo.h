@@ -42,14 +42,16 @@ typedef struct s_philo
 
 typedef struct s_supervisor
 {
-	long	number_of_philo; // Total number of philosophers
-	long	time_to_die; // The max time between meals (or the beginning of the simulation and the first meal)
-	long	time_to_eat; // The time it takes the philosopher to eat
-	long	time_to_sleep; // The time it takes the philosopher to sleep
-	long	number_of_meals; // The number of meals each philosopher has to eat before the end of simulation (-1 means INF)
-	t_bool	has_error;
-	t_philo	**philos;
-	t_fork	**forks;
+	struct timeval	simulation_start; // The time the simulation was started
+	struct timezone simulation_timezone; // The current timezone
+	long			number_of_philo; // Total number of philosophers
+	long			time_to_die; // The max time between meals (or the beginning of the simulation and the first meal)
+	long			time_to_eat; // The time it takes the philosopher to eat
+	long			time_to_sleep; // The time it takes the philosopher to sleep
+	long			number_of_meals; // The number of meals each philosopher has to eat before the end of simulation (-1 means INF)
+	t_bool			has_error;
+	t_philo			**philos;
+	t_fork			**forks;
 }	t_supervisor;
 
 const char		*get_activity_description(t_activity activity);
@@ -63,4 +65,5 @@ void			init_supervisor_numbers(t_supervisor *super, char **av);
 t_philo			**init_philos(t_supervisor *super);
 t_fork			**init_forks(t_supervisor *super);
 void			free_until(void **elem, int i);
+struct timeval	get_sim_runtime(t_supervisor *super);
 #endif
