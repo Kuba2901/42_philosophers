@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:19:18 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/06 20:24:35 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/06 20:55:08 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,18 @@ long	custom_atoi_long(const char *str)
 	return (sign * result);
 }
 
+static void	init_supervisor(t_supervisor *super)
+{
+	super->forks = NULL;
+	super->philos = NULL;
+	super->has_error = FALSE;
+	super->number_of_meals = 0;
+	super->number_of_philo = 0;
+	super->time_to_die = 0;
+	super->time_to_eat = 0;
+	super->time_to_sleep = 0;
+}
+
 t_supervisor	*parse_input(int ac, char **av)
 {
 	t_supervisor	*ret;
@@ -106,6 +118,7 @@ t_supervisor	*parse_input(int ac, char **av)
 	ret = malloc(sizeof(t_supervisor));
 	if (!ret)
 		exit(1);
+	init_supervisor(ret);
 	if (!is_valid_number(av[1]) || !is_valid_number(av[2]) \
 		|| !is_valid_number(av[3]) || !is_valid_number(av[4]))
 	{
