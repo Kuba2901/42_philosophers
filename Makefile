@@ -1,9 +1,9 @@
 NAME = philo
-SRC = main.c src/utils/utils.c src/utils/input.c src/utils/init.c src/utils/input_checks.c src/helpers.c
+SRC = main.c src/utils/utils.c src/utils/input.c src/utils/init.c src/utils/input_checks.c src/helpers.c src/utils/forks.c
 OBJ = $(SRC:.c=.o)
 INC = -Iinc/
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 RM = rm -rf
 
 %.o: %.c

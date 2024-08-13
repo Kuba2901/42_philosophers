@@ -21,7 +21,6 @@ typedef enum s_activity
 	THINKING,
 	DIED,
 	FORK
-
 }	t_activity;
 
 typedef struct s_fork
@@ -32,12 +31,17 @@ typedef struct s_fork
 
 typedef struct s_philo
 {
+	long		meals_eaten; // The number of meals the philosopher has consumed so far
 	long		index; // Starting with 1
 	long		last_sleep; // TS Since the beginning of last sleeping session
 	long		last_thinking; // TS Since the beginning of last thinking session
 	long		last_meal; // TS Since the beginning of last eating session
+	t_bool		*is_dead;
 	t_activity	activity; // Current philosopher activity
 	pthread_t	thread;
+	t_fork		*left;
+	t_fork		*right;
+	t_bool		*is_over;
 }	t_philo;
 
 typedef struct s_supervisor
@@ -49,9 +53,10 @@ typedef struct s_supervisor
 	long			time_to_eat; // The time it takes the philosopher to eat
 	long			time_to_sleep; // The time it takes the philosopher to sleep
 	long			number_of_meals; // The number of meals each philosopher has to eat before the end of simulation (-1 means INF)
-	t_bool			has_error;
-	t_philo			**philos;
+	t_bool			has_error; // If an error occured - a philo has died or sth
+	t_philo			**philos; // Pointer to an array of philosophers
 	t_fork			**forks;
+	t_bool			is_over; // Indicator of the game being over
 }	t_supervisor;
 
 const char		*get_activity_description(t_activity activity);
@@ -66,4 +71,5 @@ t_philo			**init_philos(t_supervisor *super);
 t_fork			**init_forks(t_supervisor *super);
 void			free_until(void **elem, int i);
 struct timeval	get_sim_runtime(t_supervisor *super);
+void			assign_forks_to_philos(t_supervisor *super);
 #endif

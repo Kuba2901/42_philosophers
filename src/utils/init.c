@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:00:29 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/07 16:42:44 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/12 18:53:05 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,6 @@ static t_philo *init_single_philo(int i)
     ret->last_meal = 0;
     ret->last_sleep = 0;
     ret->last_thinking = 0;
-    // if (pthread_create(&ret->thread, NULL, philo_routine, (void *)ret) != 0) {
-    //     print_error("Error creating philosopher thread");
-    //     free(ret);
-    //     return NULL;
-    // }
     return (ret);
 }
 
@@ -100,9 +95,10 @@ t_philo **init_philos(t_supervisor *super)
             free_until((void **)ret, i);
             return NULL;
         }
+		current->is_over = &super->is_over;
         ret[i] = current;
     }
-    return ret;
+    return (ret);
 }
 
 t_fork **init_forks(t_supervisor *super)
