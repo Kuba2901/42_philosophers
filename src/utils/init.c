@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:00:29 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/12 18:53:05 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/13 18:41:14 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,34 +28,71 @@ void free_until(void **elem, int i)
 	}
 }
 
-// TEMP
-// Thread function for the philosopher
-void *philo_routine(void *arg) {
-    t_philo *philo = (t_philo *)arg;
-    
-    while (1) {
-        // Simulate thinking
-        philo->activity = THINKING;
-        printf("Philosopher %ld is thinking\n", philo->index);
-        sleep(1);  // Simulate time taken for thinking
-        
-        // Simulate eating
-        philo->activity = EATING;
-        philo->last_meal = time(NULL);
-        printf("Philosopher %ld is eating\n", philo->index);
-        sleep(2);  // Simulate time taken for eating
-        
-        // Simulate sleeping
-        philo->activity = SLEEPING;
-        philo->last_sleep = time(NULL);
-        printf("Philosopher %ld is sleeping\n", philo->index);
-        sleep(1);  // Simulate time taken for sleeping
-    }
-    
-    return NULL;
+// Function to get the time since last meal
+long	get_time_since_last_meal(t_philo *philo)
+{
+	return ((get_sim_runtime(*philo->simulation_start).tv_usec * 1000) - philo->last_meal);
 }
 
-// /TEMP
+void	pick_up_forks(t_philo *philo)
+{
+	int	left_index;
+	int	right_index;
+
+	left_index = philo->left->index;
+	right_index = philo->right->index;
+	if (left_index < right_index)
+	{
+		pthread_mutex_lock(&philo->left->lock);
+		printf("Philo (%ld) has just picked up the left fork!\n", philo->index);
+		pthread_mutex_lock(&philo->right->lock);
+		printf("Philo (%ld) has just picked up the right fork!\n", philo->index);
+	}
+	else
+	{
+		pthread_mutex_lock(&philo->right->lock);
+		printf("Philo (%ld) has just picked up the right fork!\n", philo->index);
+		pthread_mutex_lock(&philo->left->lock);
+		printf("Philo (%ld) has just picked up the left fork!\n", philo->index);
+
+	}
+}
+
+void	put_down_forks(t_philo *philo)
+{
+	pthread_mutex_unlock(&philo->left->lock);
+	printf("Philo (%ld) has just put down the left fork!\n", philo->index);
+	pthread_mutex_unlock(&philo->right->lock);
+	printf("Philo (%ld) has just put down the right fork!\n", philo->index);
+}
+
+void	philo_sleep(t_philo *philo)
+{
+	philo->activity = SLEEPING;
+	print_philo_state(*philo);
+	sleep(*philo->time_to_sleep);
+}
+
+void	think(t_philo *philo)
+{
+	philo->activity = THINKING;
+	print_philo_state(*philo);
+	sleep(*philo->time_to_sleep);
+	printf("Done sleeping\n");
+}
+
+void	eat(t_philo *philo)
+{
+	if (get_time_since_last_meal(philo) > *philo->time_to_die)
+	{
+		printf("Philo (%ld) has died of starvation :(\n", philo->index);
+		*philo->is_dead = TRUE;
+	}
+	philo->activity = EATING;
+	print_philo_state(*philo);
+	sleep(*philo->time_to_eat);
+	philo->last_meal = get_sim_runtime(*philo->simulation_start).tv_usec;
+}
 
 static t_philo *init_single_philo(int i)
 {
@@ -96,6 +133,12 @@ t_philo **init_philos(t_supervisor *super)
             return NULL;
         }
 		current->is_over = &super->is_over;
+		current->number_of_philo = &super->number_of_philo;
+		current->time_to_die = &super->time_to_die;
+		current->time_to_eat = &super->time_to_eat;
+		current->time_to_sleep = &super->time_to_sleep;
+		current->simulation_start = &super->simulation_start;
+		current->is_dead = &super->has_error;
         ret[i] = current;
     }
     return (ret);

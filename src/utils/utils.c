@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:07:11 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/07 17:13:26 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/13 18:29:42 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	print_philo_state(t_philo philo)
 	const char	*activity_description;
 
 	activity_description = get_activity_description(philo.activity);
-	printf("%ld %ld %s\n", philo.last_meal, philo.index, activity_description);
+	printf("%d %ld %s\n", get_sim_runtime(*philo.simulation_start).tv_usec, philo.index, activity_description);
 }
 
 void	print_error(const char *err)
@@ -80,6 +80,6 @@ void	debug_print_supervisor_data(t_supervisor supervisor)
 	printf("number_of_meals: %ld\n", supervisor.number_of_meals);
 	printf("Seconds since 1/1/1970: %lu\n",supervisor.simulation_start.tv_sec);
 	gettimeofday(&tv_now, &tz_now);
-	printf("Sim runtime: %lu\n", get_sim_runtime(&supervisor).tv_sec);
+	printf("Sim runtime: %lu\n", get_sim_runtime(supervisor.simulation_start).tv_sec);
 	printf("\n");
 }

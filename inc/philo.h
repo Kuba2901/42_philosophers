@@ -31,17 +31,22 @@ typedef struct s_fork
 
 typedef struct s_philo
 {
-	long		meals_eaten; // The number of meals the philosopher has consumed so far
-	long		index; // Starting with 1
-	long		last_sleep; // TS Since the beginning of last sleeping session
-	long		last_thinking; // TS Since the beginning of last thinking session
-	long		last_meal; // TS Since the beginning of last eating session
-	t_bool		*is_dead;
-	t_activity	activity; // Current philosopher activity
-	pthread_t	thread;
-	t_fork		*left;
-	t_fork		*right;
-	t_bool		*is_over;
+	long			meals_eaten; // The number of meals the philosopher has consumed so far
+	long			index; // Starting with 1
+	long			last_sleep; // TS Since the beginning of last sleeping session
+	long			last_thinking; // TS Since the beginning of last thinking session
+	long			last_meal; // TS Since the beginning of last eating session
+	t_bool			*is_dead;
+	t_activity		activity; // Current philosopher activity
+	pthread_t		thread;
+	t_fork			*left;
+	t_fork			*right;
+	t_bool			*is_over;
+	long			*number_of_philo;
+	long			*time_to_die;
+	long			*time_to_eat;
+	long			*time_to_sleep;
+	struct timeval	*simulation_start; 
 }	t_philo;
 
 typedef struct s_supervisor
@@ -70,6 +75,11 @@ void			init_supervisor_numbers(t_supervisor *super, char **av);
 t_philo			**init_philos(t_supervisor *super);
 t_fork			**init_forks(t_supervisor *super);
 void			free_until(void **elem, int i);
-struct timeval	get_sim_runtime(t_supervisor *super);
+struct timeval	get_sim_runtime(struct timeval start);
 void			assign_forks_to_philos(t_supervisor *super);
+void			eat(t_philo *philo);
+void			think(t_philo *philo);
+void			philo_sleep(t_philo *philo);
+void			put_down_forks(t_philo *philo);
+void			pick_up_forks(t_philo *philo);
 #endif

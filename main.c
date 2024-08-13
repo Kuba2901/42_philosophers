@@ -6,11 +6,24 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/12 18:48:00 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/13 18:37:33 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
+
+// Thread function for the philosopher
+void *philo_routine(t_philo *philo) {
+    while (!(*philo->is_over) && !(*philo->is_dead)) {
+		pick_up_forks(philo);
+		eat(philo);
+		put_down_forks(philo);
+        think(philo);
+		philo_sleep(philo);
+    }
+    
+    return NULL;
+}
 
 void	print_philo_report(t_supervisor *super)
 {
@@ -40,21 +53,12 @@ int	main(int ac, char **av)
 		exit(1);
 	}
 	assign_forks_to_philos(super);
-	
-	int		i;
-    t_philo *philo;
-    i = -1;
-    while (++i < super->number_of_philo)
-    {
-        philo = super->philos[i];
-        printf("Philo [%d]:\n", i);
-        printf("    - left: %p\n", (void *)philo->left);
-        printf("    - right: %p\n", (void *)philo->right);
-    }
-	debug_print_supervisor_data(*super);
-	sleep(5);
-	debug_print_supervisor_data(*super);
-	print_philo_report(super);
+	int	i = -1;
+	while (++i < super->number_of_philo)
+		pthread_create(&super->philos[i]->thread, NULL, (void *)philo_routine, super->philos[i]);
+	i = -1;
+	while (++i < super->number_of_philo)
+		pthread_join(super->philos[i]->thread, NULL);
 	free_resources(super);
 	return (0);
 }
