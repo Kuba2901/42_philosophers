@@ -63,6 +63,7 @@ typedef struct s_supervisor
 	t_philo			**philos; // Pointer to an array of philosophers
 	t_fork			**forks;
 	t_bool			is_over; // Indicator of the game being over
+	pthread_t		thread;
 }	t_supervisor;
 
 const char		*get_activity_description(t_activity activity);
@@ -85,6 +86,7 @@ void			put_down_forks(t_philo *philo);
 void			pick_up_forks(t_philo *philo);
 unsigned long	get_sim_runtime_milliseconds(struct timeval simulation_start);
 unsigned long	get_time_since_last_meal(t_philo *philo);
-int				ft_usleep(size_t milliseconds);
+int				ft_usleep(unsigned long milliseconds);
 unsigned long	ft_get_current_time(void);
+unsigned long	get_runtime_in_ms(t_philo *philo);
 #endif

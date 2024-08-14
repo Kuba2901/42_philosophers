@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:07:11 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/14 18:34:23 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/14 19:57:55 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,22 @@ const char	*get_activity_description(t_activity activity)
 		return "died";
 }
 
+unsigned long	get_runtime_in_ms(t_philo *philo)
+{
+	long	sim_start;
+	long	runtime;
+
+	sim_start = (philo->simulation_start->tv_sec * 1000 + philo->simulation_start->tv_usec / 1000);
+	runtime = ft_get_current_time() - sim_start;
+	return (runtime);
+}
+
 void	print_philo_state(t_philo philo)
 {
-	const char	*activity_description;
+	const char		*activity_description;
 
 	activity_description = get_activity_description(philo.activity);
-	printf("%lu %ld %s\n", ft_get_current_time(), philo.index, activity_description);
+	printf("%lu %ld %s\n", get_runtime_in_ms(&philo), philo.index, activity_description);
 }
 
 void	print_error(const char *err)

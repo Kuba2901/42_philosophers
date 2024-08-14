@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:00:29 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/14 18:32:05 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/14 19:58:17 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void	think(t_philo *philo)
 {
 	philo->activity = THINKING;
 	print_philo_state(*philo);
-	ft_usleep(*philo->time_to_sleep);
 }
 
 void eat(t_philo *philo)
@@ -104,7 +103,6 @@ void eat(t_philo *philo)
     print_philo_state(*philo);
     ft_usleep(*philo->time_to_eat);
     philo->meals_eaten++;
-    // printf("Philo (%ld) has eaten %ld/%ld meals\n", philo->index, philo->meals_eaten, *philo->number_of_meals_to_eat);
     if (*philo->number_of_meals_to_eat && philo->meals_eaten >= *philo->number_of_meals_to_eat)
         philo->is_over = TRUE;
 }

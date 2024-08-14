@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/14 18:33:48 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/14 19:54:46 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 // Thread function for the philosopher
 void *philo_routine(t_philo *philo) {
     while (!(philo->is_over) && !(*philo->is_dead)) {
+        think(philo);
 		long last_meal_delta = get_time_since_last_meal(philo);
 		if (last_meal_delta > *philo->time_to_die)
 		{	
@@ -25,7 +26,6 @@ void *philo_routine(t_philo *philo) {
 		pick_up_forks(philo);
 		eat(philo);
 		put_down_forks(philo);
-        think(philo);
 		philo_sleep(philo);
     }
     
