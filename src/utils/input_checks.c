@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:14:23 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/07 16:53:47 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/14 17:17:13 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	assign_time_to_die(t_supervisor *super, char *str)
 void	init_supervisor_numbers(t_supervisor *super, char **av)
 {
 	assign_number_of_philo(super, av[1]);
-	assign_time_to_eat(super, av[2]);
-	assign_time_to_die(super, av[3]);
+	assign_time_to_die(super, av[2]);
+	assign_time_to_eat(super, av[3]);
 	assign_time_to_sleep(super, av[4]);
 }

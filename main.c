@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/14 16:58:29 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/14 17:20:16 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 
 // Thread function for the philosopher
 void *philo_routine(t_philo *philo) {
-    while (!(*philo->is_over) && !(*philo->is_dead)) {
+    while (!(philo->is_over) && !(*philo->is_dead)) {
 		long last_meal_delta = get_time_since_last_meal(philo);
+		printf("Philo (%ld) time since last meal: (%ld) <-> max: (%ld)\n", philo->index, last_meal_delta, *philo->time_to_die);
 		if (last_meal_delta > *philo->time_to_die)
 		{
 			printf("Philo (%ld) has died of starvation :(\n", philo->index);
 			printf("Time to die: (%ld) - runtime: (%d) :(\n", *philo->time_to_die, get_sim_runtime(*philo->simulation_start).tv_usec * 1000);
 			*philo->is_dead = TRUE;
-			return (void *)philo;
+			return NULL;
 		}
 		pick_up_forks(philo);
 		eat(philo);

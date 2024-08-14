@@ -41,7 +41,7 @@ typedef struct s_philo
 	pthread_t		thread;
 	t_fork			*left;
 	t_fork			*right;
-	t_bool			*is_over;
+	t_bool			is_over;
 	long			*number_of_philo;
 	long			*time_to_die;
 	long			*time_to_eat;

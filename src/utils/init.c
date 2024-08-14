@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:00:29 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/14 17:12:41 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/14 17:26:39 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,10 @@ void free_until(void **elem, int i)
 // Function to get the time since last meal
 unsigned long	get_time_since_last_meal(t_philo *philo)
 {
+	printf("COUNTING TIME SINCE LAST MEAL\n");
+	printf("Philo (%ld) last meal: (%ld)\n", philo->index, philo->last_meal);
+	printf("Philo (%ld) current time: (%ld)\n", philo->index, ft_get_current_time());
+	printf("Philo (%ld) delta: (%ld)\n", philo->index, ft_get_current_time() - philo->last_meal);
 	return (ft_get_current_time() - philo->last_meal);
 }
 
@@ -100,17 +104,40 @@ void	think(t_philo *philo)
 	ft_usleep(*philo->time_to_sleep);
 }
 
-void	eat(t_philo *philo)
+void eat(t_philo *philo)
 {
-	philo->activity = EATING;
-	print_philo_state(*philo);
-	ft_usleep(*philo->time_to_eat);
-	philo->last_meal = ft_get_current_time();
-	philo->meals_eaten++;
-	printf("Philo (%ld) has eaten %ld/%ld meals\n", philo->index, philo->meals_eaten, *philo->number_of_meals_to_eat);
-	if (philo->meals_eaten >= *philo->number_of_meals_to_eat)
-		*philo->is_over = TRUE;
+    philo->activity = EATING;
+    print_philo_state(*philo);
+    // Log the time before updating
+    unsigned long before_update = ft_get_current_time();
+    printf("Philo (%ld) time before update: (%ld)\n", philo->index, before_update);
+    ft_usleep(*philo->time_to_eat);
+    
+    
+    // Update last_meal with current time
+    philo->last_meal = ft_get_current_time();
+    
+    // Log after updating
+    printf("Philo (%ld) last meal time updated to: (%ld)\n", philo->index, philo->last_meal);
+    
+    philo->meals_eaten++;
+    printf("Philo (%ld) has eaten %ld/%ld meals\n", philo->index, philo->meals_eaten, *philo->number_of_meals_to_eat);
+    if (philo->meals_eaten >= *philo->number_of_meals_to_eat)
+        philo->is_over = TRUE;
 }
+
+
+// void	eat(t_philo *philo)
+// {
+// 	philo->activity = EATING;
+// 	print_philo_state(*philo);
+// 	ft_usleep(*philo->time_to_eat);
+// 	philo->last_meal = ft_get_current_time();
+// 	philo->meals_eaten++;
+// 	printf("Philo (%ld) has eaten %ld/%ld meals\n", philo->index, philo->meals_eaten, *philo->number_of_meals_to_eat);
+// 	if (philo->meals_eaten >= *philo->number_of_meals_to_eat)
+// 		philo->is_over = TRUE;
+// }
 
 static t_philo *init_single_philo(int i)
 {
@@ -125,8 +152,9 @@ static t_philo *init_single_philo(int i)
     ret->activity = SLEEPING;
     ret->index = i + 1;
     ret->last_meal = 0;
-    ret->last_sleep = 0;
-    ret->last_thinking = 0;
+	ret->meals_eaten = 0;
+	ret->last_meal = ft_get_current_time();
+	ret->is_over = FALSE;
     return (ret);
 }
 
@@ -150,7 +178,6 @@ t_philo **init_philos(t_supervisor *super)
             free_until((void **)ret, i);
             return NULL;
         }
-		current->is_over = &super->is_over;
 		current->number_of_philo = &super->number_of_philo;
 		current->time_to_die = &super->time_to_die;
 		current->time_to_eat = &super->time_to_eat;
