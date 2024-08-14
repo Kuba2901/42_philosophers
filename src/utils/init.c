@@ -6,11 +6,31 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:00:29 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/13 18:41:14 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/14 17:12:41 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
+
+unsigned long	ft_get_current_time(void)
+{
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		print_error("Error getting current time");
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+}
+
+int	ft_usleep(unsigned long milliseconds)
+{
+	unsigned long	start;
+
+	start = ft_get_current_time();
+	while ((ft_get_current_time() - start) < milliseconds)
+		usleep(500);
+	return (0);
+}
+
 
 void free_until(void **elem, int i)
 {
@@ -29,9 +49,9 @@ void free_until(void **elem, int i)
 }
 
 // Function to get the time since last meal
-long	get_time_since_last_meal(t_philo *philo)
+unsigned long	get_time_since_last_meal(t_philo *philo)
 {
-	return ((get_sim_runtime(*philo->simulation_start).tv_usec * 1000) - philo->last_meal);
+	return (ft_get_current_time() - philo->last_meal);
 }
 
 void	pick_up_forks(t_philo *philo)
@@ -44,16 +64,16 @@ void	pick_up_forks(t_philo *philo)
 	if (left_index < right_index)
 	{
 		pthread_mutex_lock(&philo->left->lock);
-		printf("Philo (%ld) has just picked up the left fork!\n", philo->index);
+		// printf("Philo (%ld) has just picked up the left fork!\n", philo->index);
 		pthread_mutex_lock(&philo->right->lock);
-		printf("Philo (%ld) has just picked up the right fork!\n", philo->index);
+		// printf("Philo (%ld) has just picked up the right fork!\n", philo->index);
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->right->lock);
-		printf("Philo (%ld) has just picked up the right fork!\n", philo->index);
+		// printf("Philo (%ld) has just picked up the right fork!\n", philo->index);
 		pthread_mutex_lock(&philo->left->lock);
-		printf("Philo (%ld) has just picked up the left fork!\n", philo->index);
+		// printf("Philo (%ld) has just picked up the left fork!\n", philo->index);
 
 	}
 }
@@ -61,37 +81,35 @@ void	pick_up_forks(t_philo *philo)
 void	put_down_forks(t_philo *philo)
 {
 	pthread_mutex_unlock(&philo->left->lock);
-	printf("Philo (%ld) has just put down the left fork!\n", philo->index);
+	// printf("Philo (%ld) has just put down the left fork!\n", philo->index);
 	pthread_mutex_unlock(&philo->right->lock);
-	printf("Philo (%ld) has just put down the right fork!\n", philo->index);
+	// printf("Philo (%ld) has just put down the right fork!\n", philo->index);
 }
 
 void	philo_sleep(t_philo *philo)
 {
 	philo->activity = SLEEPING;
 	print_philo_state(*philo);
-	sleep(*philo->time_to_sleep);
+	ft_usleep(*philo->time_to_sleep);
 }
 
 void	think(t_philo *philo)
 {
 	philo->activity = THINKING;
 	print_philo_state(*philo);
-	sleep(*philo->time_to_sleep);
-	printf("Done sleeping\n");
+	ft_usleep(*philo->time_to_sleep);
 }
 
 void	eat(t_philo *philo)
 {
-	if (get_time_since_last_meal(philo) > *philo->time_to_die)
-	{
-		printf("Philo (%ld) has died of starvation :(\n", philo->index);
-		*philo->is_dead = TRUE;
-	}
 	philo->activity = EATING;
 	print_philo_state(*philo);
-	sleep(*philo->time_to_eat);
-	philo->last_meal = get_sim_runtime(*philo->simulation_start).tv_usec;
+	ft_usleep(*philo->time_to_eat);
+	philo->last_meal = ft_get_current_time();
+	philo->meals_eaten++;
+	printf("Philo (%ld) has eaten %ld/%ld meals\n", philo->index, philo->meals_eaten, *philo->number_of_meals_to_eat);
+	if (philo->meals_eaten >= *philo->number_of_meals_to_eat)
+		*philo->is_over = TRUE;
 }
 
 static t_philo *init_single_philo(int i)
@@ -139,6 +157,7 @@ t_philo **init_philos(t_supervisor *super)
 		current->time_to_sleep = &super->time_to_sleep;
 		current->simulation_start = &super->simulation_start;
 		current->is_dead = &super->has_error;
+		current->number_of_meals_to_eat = &super->number_of_meals;
         ret[i] = current;
     }
     return (ret);
@@ -164,7 +183,7 @@ t_fork **init_forks(t_supervisor *super)
             return (NULL);
         }
         ret[i]->index = i;
-        if (pthread_mutex_init(&ret[i]->lock, NULL) != 0)
+        if (pthread_mutex_init(&(ret[i]->lock), NULL) != 0)
         {
             print_error("Mutex INIT failed");
             free_until((void **)ret, i);

@@ -46,6 +46,7 @@ typedef struct s_philo
 	long			*time_to_die;
 	long			*time_to_eat;
 	long			*time_to_sleep;
+	long			*number_of_meals_to_eat;
 	struct timeval	*simulation_start; 
 }	t_philo;
 
@@ -82,4 +83,8 @@ void			think(t_philo *philo);
 void			philo_sleep(t_philo *philo);
 void			put_down_forks(t_philo *philo);
 void			pick_up_forks(t_philo *philo);
+unsigned long	get_sim_runtime_milliseconds(struct timeval simulation_start);
+unsigned long	get_time_since_last_meal(t_philo *philo);
+int				ft_usleep(size_t milliseconds);
+unsigned long	ft_get_current_time(void);
 #endif

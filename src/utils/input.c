@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:19:18 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/07 16:59:39 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:40:31 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ static void	init_supervisor(t_supervisor *super)
 	super->time_to_die = 0;
 	super->time_to_eat = 0;
 	super->time_to_sleep = 0;
+	super->is_over = FALSE;
 }
 
 t_supervisor	*parse_input(int ac, char **av)
