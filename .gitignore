@@ -2,3 +2,4 @@ philo
 *.o
 .vscode/
 examples/
+tester/
