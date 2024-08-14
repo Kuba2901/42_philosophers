@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/14 18:23:13 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/14 18:33:48 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@
 void *philo_routine(t_philo *philo) {
     while (!(philo->is_over) && !(*philo->is_dead)) {
 		long last_meal_delta = get_time_since_last_meal(philo);
-		printf("Philo (%ld) time since last meal: (%ld) <-> max: (%ld)\n", philo->index, last_meal_delta, *philo->time_to_die);
 		if (last_meal_delta > *philo->time_to_die)
-		{
-			printf("Philo (%ld) has died of starvation :(\n", philo->index);
-			printf("Time to die: (%ld) - runtime: (%ld) :(\n", *philo->time_to_die, ft_get_current_time());
+		{	
+			printf("%ld %ld died\n", ft_get_current_time(), philo->index);
 			*philo->is_dead = TRUE;
 			return NULL;
 		}
