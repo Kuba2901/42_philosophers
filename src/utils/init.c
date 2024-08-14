@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:00:29 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/14 17:26:39 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/14 18:17:49 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,6 @@ void free_until(void **elem, int i)
 // Function to get the time since last meal
 unsigned long	get_time_since_last_meal(t_philo *philo)
 {
-	printf("COUNTING TIME SINCE LAST MEAL\n");
-	printf("Philo (%ld) last meal: (%ld)\n", philo->index, philo->last_meal);
-	printf("Philo (%ld) current time: (%ld)\n", philo->index, ft_get_current_time());
-	printf("Philo (%ld) delta: (%ld)\n", philo->index, ft_get_current_time() - philo->last_meal);
 	return (ft_get_current_time() - philo->last_meal);
 }
 
@@ -68,26 +64,19 @@ void	pick_up_forks(t_philo *philo)
 	if (left_index < right_index)
 	{
 		pthread_mutex_lock(&philo->left->lock);
-		// printf("Philo (%ld) has just picked up the left fork!\n", philo->index);
 		pthread_mutex_lock(&philo->right->lock);
-		// printf("Philo (%ld) has just picked up the right fork!\n", philo->index);
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->right->lock);
-		// printf("Philo (%ld) has just picked up the right fork!\n", philo->index);
 		pthread_mutex_lock(&philo->left->lock);
-		// printf("Philo (%ld) has just picked up the left fork!\n", philo->index);
-
 	}
 }
 
 void	put_down_forks(t_philo *philo)
 {
 	pthread_mutex_unlock(&philo->left->lock);
-	// printf("Philo (%ld) has just put down the left fork!\n", philo->index);
 	pthread_mutex_unlock(&philo->right->lock);
-	// printf("Philo (%ld) has just put down the right fork!\n", philo->index);
 }
 
 void	philo_sleep(t_philo *philo)
@@ -108,18 +97,8 @@ void eat(t_philo *philo)
 {
     philo->activity = EATING;
     print_philo_state(*philo);
-    // Log the time before updating
-    unsigned long before_update = ft_get_current_time();
-    printf("Philo (%ld) time before update: (%ld)\n", philo->index, before_update);
     ft_usleep(*philo->time_to_eat);
-    
-    
-    // Update last_meal with current time
     philo->last_meal = ft_get_current_time();
-    
-    // Log after updating
-    printf("Philo (%ld) last meal time updated to: (%ld)\n", philo->index, philo->last_meal);
-    
     philo->meals_eaten++;
     printf("Philo (%ld) has eaten %ld/%ld meals\n", philo->index, philo->meals_eaten, *philo->number_of_meals_to_eat);
     if (philo->meals_eaten >= *philo->number_of_meals_to_eat)

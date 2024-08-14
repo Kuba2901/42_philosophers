@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:14:23 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/14 17:17:13 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/14 18:21:48 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	assign_time_to_sleep(t_supervisor *super, char *str)
 		print_error("The number of philosophers has to be >= 0");
 		super->has_error = TRUE;
 	}
-	super->time_to_eat = ret;
+	super->time_to_sleep = ret;
 }
 
 static void	assign_time_to_die(t_supervisor *super, char *str)

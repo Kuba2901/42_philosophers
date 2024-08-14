@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/14 17:20:16 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/14 18:23:13 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void *philo_routine(t_philo *philo) {
 		if (last_meal_delta > *philo->time_to_die)
 		{
 			printf("Philo (%ld) has died of starvation :(\n", philo->index);
-			printf("Time to die: (%ld) - runtime: (%d) :(\n", *philo->time_to_die, get_sim_runtime(*philo->simulation_start).tv_usec * 1000);
+			printf("Time to die: (%ld) - runtime: (%ld) :(\n", *philo->time_to_die, ft_get_current_time());
 			*philo->is_dead = TRUE;
 			return NULL;
 		}
