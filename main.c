@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/17 19:01:18 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:24:11 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	*supervisor_routine(t_supervisor *super)
 	t_philo	*philo;
 	long	last_meal_delta;
 
+	gettimeofday(&super->simulation_start, NULL);
 	while (!super->error)
 	{
 		i = -1;
@@ -32,7 +33,7 @@ void	*supervisor_routine(t_supervisor *super)
 			else
 			{
 				last_meal_delta = get_time_since_last_meal(philo);
-				if (last_meal_delta >= *philo->time_to_die)
+				if (last_meal_delta >= *philo->time_to_die) // TODO : Verify if should not be (>=)
 				{   
 					pthread_mutex_lock(&super->dead_lock);
 					pthread_mutex_lock(&super->write_lock);
