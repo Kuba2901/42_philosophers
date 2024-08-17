@@ -1,14 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/17 19:01:18 by jnenczak         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    main.c.backup                                      :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#              #
+#    Updated: 2024/08/17 18:33:59 by jnenczak         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 #include <philo.h>
 
@@ -32,8 +32,8 @@ void	*supervisor_routine(t_supervisor *super)
 			else
 			{
 				last_meal_delta = get_time_since_last_meal(philo);
-				if (last_meal_delta >= *philo->time_to_die)
-				{   
+				if (last_meal_delta > *philo->time_to_die)
+				{	
 					pthread_mutex_lock(&super->dead_lock);
 					pthread_mutex_lock(&super->write_lock);
 					printf("%ld %ld died\n", get_runtime_in_ms(philo), philo->index);
@@ -49,15 +49,12 @@ void	*supervisor_routine(t_supervisor *super)
 			super->dinner_over = TRUE;
 			pthread_mutex_unlock(&super->dinner_over_lock);
 			pthread_mutex_lock(&super->write_lock);
-			printf("Dinner is over\n");
-			pthread_mutex_unlock(&super->write_lock);
+			printf("Dinner is 0ver\n");
 			break ;
 		}
-		ft_usleep(1000);
 	}
 	return (NULL);
 }
-
 
 t_bool	check_error(t_philo *philo)
 {
@@ -74,21 +71,15 @@ void *philo_routine(t_philo *philo)
 {
     while (!philo->is_full && !check_error(philo))
     {
-        if (check_error(philo)) break;
         think(philo);
-        if (check_error(philo)) break;
         pick_up_forks(philo);
-        if (check_error(philo)) {
-            put_down_forks(philo);
-            break;
-        }
         eat(philo);
         put_down_forks(philo);
-        if (check_error(philo)) break;
         philo_sleep(philo);
     }
     return (NULL);
 }
+
 
 void	print_philo_report(t_supervisor *super)
 {
@@ -122,15 +113,10 @@ int	main(int ac, char **av)
 	while (++i < super->number_of_philo)
 		pthread_create(&super->philos[i]->thread, NULL, (void *)philo_routine, super->philos[i]);
 	pthread_create(&super->thread, NULL, (void *)supervisor_routine, super);
+	pthread_join(super->thread, NULL);
 	i = -1;
 	while (++i < super->number_of_philo)
 		pthread_join(super->philos[i]->thread, NULL);
-	pthread_join(super->thread, NULL);
-	while (++i < super->number_of_philo)
-	{
-		pthread_mutex_lock(&super->philos[i]->left->lock);
-		pthread_mutex_unlock(&super->philos[i]->left->lock);
-	}
 	free_resources(super);
 	return (0);
 }

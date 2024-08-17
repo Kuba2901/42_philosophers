@@ -36,19 +36,22 @@ typedef struct s_philo
 	long			last_sleep; // TS Since the beginning of last sleeping session
 	long			last_thinking; // TS Since the beginning of last thinking session
 	long			last_meal; // TS Since the beginning of last eating session
-	t_bool			*is_dead;
 	t_activity		activity; // Current philosopher activity
 	pthread_t		thread;
 	t_fork			*left;
 	t_fork			*right;
-	t_bool			is_full;
-	t_bool			*is_dinner_over;
 	long			*number_of_philo;
 	long			*time_to_die;
 	long			*time_to_eat;
 	long			*time_to_sleep;
 	long			*number_of_meals_to_eat;
 	struct timeval	*simulation_start; 
+	t_bool			is_full;
+	t_bool			*error;
+	pthread_mutex_t	edit_lock;
+	pthread_mutex_t	*write_lock;
+	pthread_mutex_t	*dinner_over_lock;
+	pthread_mutex_t	*dead_lock;
 }	t_philo;
 
 typedef struct s_supervisor
@@ -60,15 +63,18 @@ typedef struct s_supervisor
 	long			time_to_eat; // The time it takes the philosopher to eat
 	long			time_to_sleep; // The time it takes the philosopher to sleep
 	long			number_of_meals; // The number of meals each philosopher has to eat before the end of simulation (-1 means INF)
-	t_bool			has_error; // If an error occured - a philo has died or sth
 	t_philo			**philos; // Pointer to an array of philosophers
 	t_fork			**forks;
-	t_bool			is_over; // Indicator of the game being over
 	pthread_t		thread;
+	t_bool			error;
+	t_bool			dinner_over;
+	pthread_mutex_t	write_lock;
+	pthread_mutex_t	dinner_over_lock;
+	pthread_mutex_t	dead_lock;
 }	t_supervisor;
 
 const char		*get_activity_description(t_activity activity);
-void			print_philo_state(t_philo philo);
+void			print_philo_state(t_philo *philo);
 void			print_error(const char *err);
 void			free_resources(t_supervisor *supervisor);
 t_supervisor	*parse_input(int ac, char **av);

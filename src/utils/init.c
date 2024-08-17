@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:00:29 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/14 20:01:11 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:11:19 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,28 +53,36 @@ unsigned long	get_time_since_last_meal(t_philo *philo)
 	return (ft_get_current_time() - philo->last_meal);
 }
 
-void	pick_up_forks(t_philo *philo)
+void pick_up_forks(t_philo *philo)
 {
-	int	left_index;
-	int	right_index;
+    int left_index;
+    int right_index;
 
-	left_index = philo->left->index;
-	right_index = philo->right->index;
-	philo->activity = FORK;
-	if (left_index < right_index)
-	{
-		pthread_mutex_lock(&philo->left->lock);
-		print_philo_state(*philo);
-		pthread_mutex_lock(&philo->right->lock);
-		print_philo_state(*philo);
-	}
-	else
-	{
-		pthread_mutex_lock(&philo->right->lock);
-		print_philo_state(*philo);
-		pthread_mutex_lock(&philo->left->lock);
-		print_philo_state(*philo);
-	}
+    if (*philo->number_of_philo == 1) {
+        ft_usleep(*philo->time_to_die);
+        pthread_mutex_lock(philo->dead_lock);
+        *philo->error = TRUE;
+		printf("%ld %ld died\n", get_runtime_in_ms(philo), philo->index);
+        pthread_mutex_unlock(philo->dead_lock);
+        return;
+    }
+    left_index = philo->left->index;
+    right_index = philo->right->index;
+    philo->activity = FORK;
+    if (left_index < right_index)
+    {
+        pthread_mutex_lock(&philo->left->lock);
+        print_philo_state(philo);
+        pthread_mutex_lock(&philo->right->lock);
+        print_philo_state(philo);
+    }
+    else
+    {
+        pthread_mutex_lock(&philo->right->lock);
+        print_philo_state(philo);
+        pthread_mutex_lock(&philo->left->lock);
+        print_philo_state(philo);
+    }
 }
 
 void	put_down_forks(t_philo *philo)
@@ -86,25 +94,25 @@ void	put_down_forks(t_philo *philo)
 void	philo_sleep(t_philo *philo)
 {
 	philo->activity = SLEEPING;
-	print_philo_state(*philo);
+	print_philo_state(philo);
 	ft_usleep(*philo->time_to_sleep);
 }
 
 void	think(t_philo *philo)
 {
 	philo->activity = THINKING;
-	print_philo_state(*philo);
+	print_philo_state(philo);
 }
 
 void eat(t_philo *philo)
 {
     philo->activity = EATING;
     philo->last_meal = ft_get_current_time();
-    print_philo_state(*philo);
+    print_philo_state(philo);
     ft_usleep(*philo->time_to_eat);
     philo->meals_eaten++;
     if (*philo->number_of_meals_to_eat && philo->meals_eaten >= *philo->number_of_meals_to_eat)
-        philo->is_full = TRUE;
+		philo->is_full = TRUE;
 }
 
 static t_philo *init_single_philo(int i)
@@ -151,9 +159,12 @@ t_philo **init_philos(t_supervisor *super)
 		current->time_to_eat = &super->time_to_eat;
 		current->time_to_sleep = &super->time_to_sleep;
 		current->simulation_start = &super->simulation_start;
-		current->is_dead = &super->has_error;
-		current->is_dinner_over = &super->is_over;
 		current->number_of_meals_to_eat = &super->number_of_meals;
+		pthread_mutex_init(&current->edit_lock, NULL);
+		current->write_lock = &super->write_lock;
+		current->dinner_over_lock = &super->dinner_over_lock;
+		current->dead_lock = &super->dead_lock;
+		current->error = &super->error;
         ret[i] = current;
     }
     return (ret);

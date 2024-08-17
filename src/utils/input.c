@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:19:18 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/14 20:01:37 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/17 17:18:18 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,14 @@ static void	init_supervisor(t_supervisor *super)
 	gettimeofday(&super->simulation_start, &super->simulation_timezone);
 	super->forks = NULL;
 	super->philos = NULL;
-	super->has_error = FALSE;
 	super->number_of_meals = 0;
 	super->number_of_philo = 0;
 	super->time_to_die = 0;
 	super->time_to_eat = 0;
 	super->time_to_sleep = 0;
-	super->is_over = FALSE;
+	pthread_mutex_init(&super->dead_lock, NULL);
+	pthread_mutex_init(&super->write_lock, NULL);
+	pthread_mutex_init(&super->dinner_over_lock, NULL);
 }
 
 t_supervisor	*parse_input(int ac, char **av)
@@ -129,7 +130,7 @@ t_supervisor	*parse_input(int ac, char **av)
 		exit(1);
 	}
 	init_supervisor_numbers(ret, av);
-	if (ret->has_error)
+	if (ret->error)
 	{
 		free(ret);
 		exit(1);
