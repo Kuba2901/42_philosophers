@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:00:29 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/17 19:12:40 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:57:42 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	ft_usleep(unsigned long milliseconds)
 
 	start = ft_get_current_time();
 	while ((ft_get_current_time() - start) < milliseconds)
-		usleep(500);
+		usleep(100);
 	return (0);
 }
 
@@ -125,11 +125,9 @@ static t_philo *init_single_philo(int i)
         print_error("Error initializing philosopher");
         return (NULL);
     }
-    ret->activity = SLEEPING;
+    ret->activity = THINKING;
     ret->index = i + 1;
-    ret->last_meal = 0;
 	ret->meals_eaten = 0;
-	ret->last_meal = ft_get_current_time();
 	ret->is_full = FALSE;
     return (ret);
 }
@@ -158,7 +156,8 @@ t_philo **init_philos(t_supervisor *super)
 		current->time_to_die = &super->time_to_die;
 		current->time_to_eat = &super->time_to_eat;
 		current->time_to_sleep = &super->time_to_sleep;
-		current->simulation_start = &super->simulation_start;
+		current->simulation_start = &super->sim_start;
+		current->last_meal = super->sim_start;
 		current->number_of_meals_to_eat = &super->number_of_meals;
 		pthread_mutex_init(&current->edit_lock, NULL);
 		current->write_lock = &super->write_lock;

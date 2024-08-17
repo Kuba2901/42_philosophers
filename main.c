@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/17 19:24:11 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:58:50 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*supervisor_routine(t_supervisor *super)
 	t_philo	*philo;
 	long	last_meal_delta;
 
-	gettimeofday(&super->simulation_start, NULL);
+	i = -1;
 	while (!super->error)
 	{
 		i = -1;
@@ -33,8 +33,8 @@ void	*supervisor_routine(t_supervisor *super)
 			else
 			{
 				last_meal_delta = get_time_since_last_meal(philo);
-				if (last_meal_delta >= *philo->time_to_die) // TODO : Verify if should not be (>=)
-				{   
+				if (last_meal_delta > *philo->time_to_die) // TODO : Verify if should not be (>=)
+				{
 					pthread_mutex_lock(&super->dead_lock);
 					pthread_mutex_lock(&super->write_lock);
 					printf("%ld %ld died\n", get_runtime_in_ms(philo), philo->index);
@@ -51,7 +51,6 @@ void	*supervisor_routine(t_supervisor *super)
 			pthread_mutex_unlock(&super->dinner_over_lock);
 			pthread_mutex_lock(&super->write_lock);
 			printf("Dinner is over\n");
-			pthread_mutex_unlock(&super->write_lock);
 			break ;
 		}
 		ft_usleep(1000);
@@ -107,6 +106,7 @@ int	main(int ac, char **av)
 	super = NULL;
 	super = parse_input(ac, av);
 	super->forks = init_forks(super);
+	super->sim_start = 0;
 	if (super->forks == NULL)
 	{
 		free_resources(super);
@@ -123,6 +123,13 @@ int	main(int ac, char **av)
 	while (++i < super->number_of_philo)
 		pthread_create(&super->philos[i]->thread, NULL, (void *)philo_routine, super->philos[i]);
 	pthread_create(&super->thread, NULL, (void *)supervisor_routine, super);
+	super->sim_start = ft_get_current_time();
+	i = -1;
+	while (++i < super->number_of_philo)
+	{
+		super->philos[i]->last_meal = super->sim_start;
+		super->philos[i]->simulation_start = &super->sim_start;
+	}
 	i = -1;
 	while (++i < super->number_of_philo)
 		pthread_join(super->philos[i]->thread, NULL);
@@ -132,6 +139,7 @@ int	main(int ac, char **av)
 		pthread_mutex_lock(&super->philos[i]->left->lock);
 		pthread_mutex_unlock(&super->philos[i]->left->lock);
 	}
+	pthread_mutex_unlock(&super->write_lock);
 	free_resources(super);
 	return (0);
 }

@@ -45,7 +45,7 @@ typedef struct s_philo
 	long			*time_to_eat;
 	long			*time_to_sleep;
 	long			*number_of_meals_to_eat;
-	struct timeval	*simulation_start; 
+	unsigned long	*simulation_start; 
 	t_bool			is_full;
 	t_bool			*error;
 	pthread_mutex_t	edit_lock;
@@ -56,8 +56,7 @@ typedef struct s_philo
 
 typedef struct s_supervisor
 {
-	struct timeval	simulation_start; // The time the simulation was started
-	struct timezone simulation_timezone; // The current timezone
+	unsigned long	sim_start; // TS of sim start
 	long			number_of_philo; // Total number of philosophers
 	long			time_to_die; // The max time between meals (or the beginning of the simulation and the first meal)
 	long			time_to_eat; // The time it takes the philosopher to eat
