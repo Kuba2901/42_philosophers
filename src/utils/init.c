@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:00:29 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/14 19:58:17 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/14 20:01:11 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void eat(t_philo *philo)
     ft_usleep(*philo->time_to_eat);
     philo->meals_eaten++;
     if (*philo->number_of_meals_to_eat && philo->meals_eaten >= *philo->number_of_meals_to_eat)
-        philo->is_over = TRUE;
+        philo->is_full = TRUE;
 }
 
 static t_philo *init_single_philo(int i)
@@ -122,7 +122,7 @@ static t_philo *init_single_philo(int i)
     ret->last_meal = 0;
 	ret->meals_eaten = 0;
 	ret->last_meal = ft_get_current_time();
-	ret->is_over = FALSE;
+	ret->is_full = FALSE;
     return (ret);
 }
 
@@ -152,6 +152,7 @@ t_philo **init_philos(t_supervisor *super)
 		current->time_to_sleep = &super->time_to_sleep;
 		current->simulation_start = &super->simulation_start;
 		current->is_dead = &super->has_error;
+		current->is_dinner_over = &super->is_over;
 		current->number_of_meals_to_eat = &super->number_of_meals;
         ret[i] = current;
     }
