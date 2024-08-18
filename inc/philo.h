@@ -48,6 +48,7 @@ typedef struct s_philo
 	unsigned long	*simulation_start; 
 	t_bool			is_full;
 	t_bool			*error;
+	t_bool			*dinner_over;
 	pthread_mutex_t	edit_lock;
 	pthread_mutex_t	*write_lock;
 	pthread_mutex_t	*dinner_over_lock;
@@ -77,7 +78,6 @@ void			print_philo_state(t_philo *philo);
 void			print_error(const char *err);
 void			free_resources(t_supervisor *supervisor);
 t_supervisor	*parse_input(int ac, char **av);
-void			debug_print_supervisor_data(t_supervisor supervisor);
 long			custom_atoi_long(const char *str);
 void			init_supervisor_numbers(t_supervisor *super, char **av);
 t_philo			**init_philos(t_supervisor *super);

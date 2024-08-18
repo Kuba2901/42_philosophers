@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/18 16:33:03 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/18 19:39:45 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	*supervisor_routine(t_supervisor *super)
 			else
 			{
 				last_meal_delta = get_time_since_last_meal(philo);
-				if (last_meal_delta > *philo->time_to_die) // TODO : Verify if should not be (>=)
+				if (last_meal_delta >= *philo->time_to_die) // (>=)
 				{
 					pthread_mutex_lock(&super->dead_lock);
 					pthread_mutex_lock(&super->write_lock);
@@ -53,11 +53,20 @@ void	*supervisor_routine(t_supervisor *super)
 			printf("Dinner is over\n");
 			break ;
 		}
-		ft_usleep(1000);
+		usleep(100);
 	}
 	return (NULL);
 }
 
+t_bool	check_dinner_over(t_philo *philo)
+{
+	t_bool	is_dinner_over;
+	
+	pthread_mutex_lock(philo->dinner_over_lock);
+	is_dinner_over = *philo->dinner_over;
+	pthread_mutex_unlock(philo->dinner_over_lock);
+	return (is_dinner_over);
+}
 
 t_bool	check_error(t_philo *philo)
 {
@@ -72,20 +81,27 @@ t_bool	check_error(t_philo *philo)
 // Thread function for the philosopher
 void *philo_routine(t_philo *philo)
 {
-    while (!philo->is_full && !check_error(philo))
+	if (philo->index % 2 == 0)
+		ft_usleep(*philo->time_to_sleep / 2);
+    while (!check_error(philo) && !check_dinner_over(philo))
     {
-        if (check_error(philo)) break;
+        if (check_error(philo) || check_dinner_over(philo))
+			break;
         think(philo);
-        if (check_error(philo)) break;
+        if (check_error(philo) || check_dinner_over(philo))	
+			break;
         pick_up_forks(philo);
-        if (check_error(philo)) {
+        if (check_error(philo) || check_dinner_over(philo)) {
             put_down_forks(philo);
             break;
         }
         eat(philo);
         put_down_forks(philo);
-        if (check_error(philo)) break;
+        if (check_error(philo) || check_dinner_over(philo))	
+			break;
         philo_sleep(philo);
+		if (*philo->number_of_philo % 2 != 0)
+			ft_usleep(*philo->time_to_sleep / 3);
     }
     return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:00:29 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/18 16:33:35 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/18 19:38:00 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ void pick_up_forks(t_philo *philo)
     left_index = philo->left->index;
     right_index = philo->right->index;
     philo->activity = FORK;
-    if (left_index < right_index)
+	// t_bool is_even = (philo->index) % 2 == 0;
+    // if (is_even)
+	if (left_index < right_index)
     {
         pthread_mutex_lock(&philo->left->lock);
         print_philo_state(philo);
@@ -164,6 +166,7 @@ t_philo **init_philos(t_supervisor *super)
 		current->dinner_over_lock = &super->dinner_over_lock;
 		current->dead_lock = &super->dead_lock;
 		current->error = &super->error;
+		current->dinner_over = &super->dinner_over;
         ret[i] = current;
     }
     return (ret);
