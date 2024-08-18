@@ -6,11 +6,26 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:07:11 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/17 19:52:30 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/18 19:48:53 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
+
+// ANSI color codes
+#define RESET_COLOR "\033[0m"
+#define GREEN_COLOR "\033[32m"
+#define YELLOW_COLOR "\033[33m"
+#define CYAN_COLOR "\033[36m"
+#define RED_COLOR "\033[31m"
+#define BLUE_COLOR "\033[34m"
+
+// Emojis for different states
+#define THINKING_EMOJI "🤔"
+#define EATING_EMOJI "🍝"
+#define FORK_EMOJI "🍴"
+#define SLEEPING_EMOJI "😴"
+#define DIED_EMOJI "💀"
 
 const char	*get_activity_description(t_activity activity)
 {
@@ -48,10 +63,28 @@ void	print_philo_state(t_philo *philo)
 	{
 		pthread_mutex_lock(philo->write_lock);
 		activity_description = get_activity_description(philo->activity);
-		printf("%lu %ld %s\n", get_runtime_in_ms(philo), philo->index, activity_description);
+
+		// Color and emoji based on activity
+		if (philo->activity == THINKING)
+			printf(GREEN_COLOR THINKING_EMOJI);
+		else if (philo->activity == EATING)
+			printf(YELLOW_COLOR EATING_EMOJI);
+		else if (philo->activity == FORK)
+			printf(YELLOW_COLOR FORK_EMOJI);
+		else if (philo->activity == SLEEPING)
+			printf(CYAN_COLOR SLEEPING_EMOJI);
+		else if (philo->activity == DIED)
+			printf(RED_COLOR DIED_EMOJI);
+
+		// Print the activity description with runtime and philosopher index
+		printf(" %lu %ld %s\n\n", get_runtime_in_ms(philo), philo->index, activity_description);
+
+		// Reset color
+		printf(RESET_COLOR);
 		pthread_mutex_unlock(philo->write_lock);
 	}
 }
+
 
 void	print_error(const char *err)
 {
