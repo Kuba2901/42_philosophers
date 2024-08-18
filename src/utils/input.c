@@ -6,13 +6,13 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:19:18 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/17 19:52:36 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/18 19:59:50 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-static int	is_not_just_whitespace_and_sign(const char *str)
+static int	input_check_empty(const char *str)
 {
 	int	i;
 	int	contains_digits;
@@ -32,7 +32,7 @@ static int	is_not_just_whitespace_and_sign(const char *str)
 	return (contains_digits);
 }
 
-static long	custom_strtol(const char *str, char **endptr)
+static long	input_strtol(const char *str, char **endptr)
 {
 	long	result;
 	int		sign;
@@ -58,20 +58,20 @@ static long	custom_strtol(const char *str, char **endptr)
 
 }
 
-static int	is_valid_number(const char *str)
+static int	input_check_valid_number(const char *str)
 {
 	long	val;
 	char	*endptr;
 
 	if (*str == '\0')
 		return (0);
-	if (!is_not_just_whitespace_and_sign(str))
+	if (!input_check_empty(str))
 		return (0);
-	val = custom_strtol(str, &endptr);
+	val = input_strtol(str, &endptr);
 	return (*endptr == '\0' && val >= 0);
 }
 
-long	custom_atoi_long(const char *str)
+long	input_atoi_long(const char *str)
 {
 	long	result;
 	int		sign;
@@ -121,8 +121,8 @@ t_supervisor	*parse_input(int ac, char **av)
 	if (!ret)
 		exit(1);
 	init_supervisor(ret);
-	if (!is_valid_number(av[1]) || !is_valid_number(av[2]) \
-		|| !is_valid_number(av[3]) || !is_valid_number(av[4]))
+	if (!input_check_valid_number(av[1]) || !input_check_valid_number(av[2]) \
+		|| !input_check_valid_number(av[3]) || !input_check_valid_number(av[4]))
 	{
 		free(ret);
 		print_error("One of the arguments is not a number or is negative");
@@ -136,13 +136,13 @@ t_supervisor	*parse_input(int ac, char **av)
 	}
 	if (ac == 6)
 	{
-		if (!is_valid_number(av[5]))
+		if (!input_check_valid_number(av[5]))
 		{
 			free(ret);
 			print_error("Optional argument is not a number");
 			exit(1);
 		}
-		ret->number_of_meals = custom_atoi_long(av[5]);
+		ret->number_of_meals = input_atoi_long(av[5]);
 	}
 	return (ret);
 }

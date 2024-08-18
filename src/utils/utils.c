@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:07:11 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/18 19:48:53 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/18 20:02:11 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,23 +64,23 @@ void	print_philo_state(t_philo *philo)
 		pthread_mutex_lock(philo->write_lock);
 		activity_description = get_activity_description(philo->activity);
 
-		// Color and emoji based on activity
-		if (philo->activity == THINKING)
-			printf(GREEN_COLOR THINKING_EMOJI);
-		else if (philo->activity == EATING)
-			printf(YELLOW_COLOR EATING_EMOJI);
-		else if (philo->activity == FORK)
-			printf(YELLOW_COLOR FORK_EMOJI);
-		else if (philo->activity == SLEEPING)
-			printf(CYAN_COLOR SLEEPING_EMOJI);
-		else if (philo->activity == DIED)
-			printf(RED_COLOR DIED_EMOJI);
+		// // Color and emoji based on activity
+		// if (philo->activity == THINKING)
+		// 	printf(GREEN_COLOR THINKING_EMOJI);
+		// else if (philo->activity == EATING)
+		// 	printf(YELLOW_COLOR EATING_EMOJI);
+		// else if (philo->activity == FORK)
+		// 	printf(YELLOW_COLOR FORK_EMOJI);
+		// else if (philo->activity == SLEEPING)
+		// 	printf(CYAN_COLOR SLEEPING_EMOJI);
+		// else if (philo->activity == DIED)
+		// 	printf(RED_COLOR DIED_EMOJI);
 
-		// Print the activity description with runtime and philosopher index
-		printf(" %lu %ld %s\n\n", get_runtime_in_ms(philo), philo->index, activity_description);
+		// // Print the activity description with runtime and philosopher index
+		printf("%lu %ld %s\n", get_runtime_in_ms(philo), philo->index, activity_description);
 
 		// Reset color
-		printf(RESET_COLOR);
+		// printf(RESET_COLOR);
 		pthread_mutex_unlock(philo->write_lock);
 	}
 }
@@ -129,5 +129,45 @@ void	free_resources(t_supervisor *supervisor)
 		pthread_mutex_destroy(&supervisor->dead_lock);
 		pthread_mutex_destroy(&supervisor->dinner_over_lock);
 		free(supervisor);
+	}
+}
+
+unsigned long	get_time_since_last_meal(t_philo *philo)
+{
+	return (ft_get_current_time() - philo->last_meal);
+}
+
+unsigned long	ft_get_current_time(void)
+{
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		print_error("Error getting current time");
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+}
+
+int	ft_usleep(unsigned long milliseconds)
+{
+	unsigned long	start;
+
+	start = ft_get_current_time();
+	while ((ft_get_current_time() - start) < milliseconds)
+		usleep(100);
+	return (0);
+}
+
+void free_until(void **elem, int i)
+{
+    int j;
+
+	if (elem != NULL) 
+	{
+		j = -1;
+		while (++j < i)
+		{
+			if (elem[j] != NULL)
+				free(elem[j]);
+		}
+		free(elem);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/18 19:47:46 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/18 19:58:00 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,19 +87,19 @@ void *philo_routine(t_philo *philo)
     {
         if (check_error(philo) || check_dinner_over(philo))
 			break;
-        think(philo);
+        action_think(philo);
         if (check_error(philo) || check_dinner_over(philo))	
 			break;
-        pick_up_forks(philo);
+        action_pick_up_forks(philo);
         if (check_error(philo) || check_dinner_over(philo)) {
-            put_down_forks(philo);
+            action_put_down_forks(philo);
             break;
         }
-        eat(philo);
-        put_down_forks(philo);
+        action_eat(philo);
+        action_put_down_forks(philo);
         if (check_error(philo) || check_dinner_over(philo))	
 			break;
-        philo_sleep(philo);
+        action_sleep(philo);
 		if (*philo->number_of_philo % 2 != 0)
 			ft_usleep(*philo->time_to_sleep / 3);
     }
@@ -134,7 +134,7 @@ int	main(int ac, char **av)
 		free_resources(super);
 		exit(1);
 	}
-	assign_forks_to_philos(super);
+	assign_forks(super);
 	int	i = -1;
 	super->sim_start = ft_get_current_time();
 	while (++i < super->number_of_philo)
