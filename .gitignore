@@ -4,3 +4,4 @@ philo
 examples/
 tester/
 out
+*.DS_Store

@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/17 19:58:50 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/18 16:33:03 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,10 @@ int	main(int ac, char **av)
 	}
 	assign_forks_to_philos(super);
 	int	i = -1;
+	super->sim_start = ft_get_current_time();
 	while (++i < super->number_of_philo)
 		pthread_create(&super->philos[i]->thread, NULL, (void *)philo_routine, super->philos[i]);
 	pthread_create(&super->thread, NULL, (void *)supervisor_routine, super);
-	super->sim_start = ft_get_current_time();
 	i = -1;
 	while (++i < super->number_of_philo)
 	{
