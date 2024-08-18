@@ -1,5 +1,5 @@
 NAME = philo
-SRC = main.c src/utils/utils.c src/utils/input.c src/utils/actions.c src/utils/input_checks.c src/helpers.c src/utils/forks.c src/utils/philos.c
+SRC = main.c src/utils/utils.c src/utils/input.c src/utils/actions.c src/utils/input_checks.c src/helpers.c src/utils/forks.c src/utils/philos.c src/utils/input_2.c
 OBJ = $(SRC:.c=.o)
 INC = -Iinc/
 CC = cc

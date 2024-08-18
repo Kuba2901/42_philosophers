@@ -7,6 +7,18 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <limits.h>
+#define RESET_COLOR "\033[0m"
+#define GREEN_COLOR "\033[32m"
+#define YELLOW_COLOR "\033[33m"
+#define CYAN_COLOR "\033[36m"
+#define RED_COLOR "\033[31m"
+#define BLUE_COLOR "\033[34m"
+#define THINKING_EMOJI "🤔"
+#define EATING_EMOJI "🍝"
+#define FORK_EMOJI "🍴"
+#define SLEEPING_EMOJI "😴"
+#define DIED_EMOJI "💀"
+#define PREETY_PRINT TRUE
 
 typedef enum s_bool
 {
@@ -95,4 +107,9 @@ unsigned long	get_time_since_last_meal(t_philo *philo);
 int				ft_usleep(unsigned long milliseconds);
 unsigned long	ft_get_current_time(void);
 unsigned long	get_runtime_in_ms(t_philo *philo);
+int				input_check_empty(const char *str);
+long			input_strtol(const char *str, char **endptr);
+int				input_check_valid_number(const char *str);
+long			input_atoi_long(const char *str);
+void			init_supervisor(t_supervisor *super);
 #endif
