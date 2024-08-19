@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/18 19:58:00 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:31:45 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	*supervisor_routine(t_supervisor *super)
 			pthread_mutex_lock(&super->dinner_over_lock);
 			super->dinner_over = TRUE;
 			pthread_mutex_unlock(&super->dinner_over_lock);
-			pthread_mutex_lock(&super->write_lock);
+			// pthread_mutex_lock(&super->write_lock); // BLOCKS THE EXIT OF THE PROGRAM
 			printf("Dinner is over\n");
 			break ;
 		}
@@ -150,12 +150,6 @@ int	main(int ac, char **av)
 	while (++i < super->number_of_philo)
 		pthread_join(super->philos[i]->thread, NULL);
 	pthread_join(super->thread, NULL);
-	while (++i < super->number_of_philo)
-	{
-		pthread_mutex_lock(&super->philos[i]->left->lock);
-		pthread_mutex_unlock(&super->philos[i]->left->lock);
-	}
-	pthread_mutex_unlock(&super->write_lock);
 	free_resources(super);
 	return (0);
 }

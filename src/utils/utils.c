@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:07:11 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/18 20:27:54 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:31:33 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	pretty_print(t_philo *philo)
 		printf(CYAN_COLOR SLEEPING_EMOJI);
 	else if (philo->activity == DIED)
 		printf(RED_COLOR DIED_EMOJI);
-	printf("%lu %ld %s\n", get_runtime_in_ms(philo), philo->index, get_activity_description(philo->activity));
+	printf(" %lu %ld %s\n", get_runtime_in_ms(philo), philo->index, get_activity_description(philo->activity));
 	printf(RESET_COLOR);
 }
 
@@ -60,11 +60,13 @@ static void	normal_print(t_philo *philo)
 void	print_philo_state(t_philo *philo)
 {
 	t_bool			is_error;
+	t_bool			is_dinner_over;
 
+	is_dinner_over = check_dinner_over(philo);
 	pthread_mutex_lock(philo->dead_lock);
 	is_error = *philo->error;
 	pthread_mutex_unlock(philo->dead_lock);
-	if (!is_error)
+	if (!is_error && !is_dinner_over)
 	{
 		pthread_mutex_lock(philo->write_lock);
 		if (PREETY_PRINT)

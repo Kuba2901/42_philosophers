@@ -18,7 +18,7 @@
 #define FORK_EMOJI "🍴"
 #define SLEEPING_EMOJI "😴"
 #define DIED_EMOJI "💀"
-#define PREETY_PRINT TRUE
+#define PREETY_PRINT FALSE
 
 typedef enum s_bool
 {
@@ -112,4 +112,5 @@ long			input_strtol(const char *str, char **endptr);
 int				input_check_valid_number(const char *str);
 long			input_atoi_long(const char *str);
 void			init_supervisor(t_supervisor *super);
+t_bool			check_dinner_over(t_philo *philo);
 #endif

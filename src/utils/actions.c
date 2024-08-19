@@ -6,11 +6,20 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:00:29 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/18 20:12:09 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:08:37 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
+
+void	exit_process(t_philo *philo)
+{
+	if (check_dinner_over(philo))
+	{
+		pthread_mutex_unlock(&philo->left->lock);
+		pthread_mutex_unlock(&philo->right->lock);
+	}	
+}
 
 void	action_pick_up_forks(t_philo *philo)
 {
