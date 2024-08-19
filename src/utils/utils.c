@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:07:11 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/19 18:31:33 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/19 19:30:51 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,23 +59,22 @@ static void	normal_print(t_philo *philo)
 
 void	print_philo_state(t_philo *philo)
 {
-	t_bool			is_error;
-	t_bool			is_dinner_over;
+    t_bool			is_error;
+    t_bool			is_dinner_over;
 
-	is_dinner_over = check_dinner_over(philo);
-	pthread_mutex_lock(philo->dead_lock);
-	is_error = *philo->error;
-	pthread_mutex_unlock(philo->dead_lock);
-	if (!is_error && !is_dinner_over)
-	{
-		pthread_mutex_lock(philo->write_lock);
-		if (PREETY_PRINT)
-			pretty_print(philo);
-		else
-			normal_print(philo);
-		pthread_mutex_unlock(philo->write_lock);
-	}
+    is_dinner_over = check_dinner_over(philo);
+    is_error = check_error(philo);
+    if (!is_error && !is_dinner_over)
+    {
+        pthread_mutex_lock(philo->write_lock);
+        if (PREETY_PRINT)
+            pretty_print(philo);
+        else
+            normal_print(philo);
+        pthread_mutex_unlock(philo->write_lock);
+    }
 }
+
 
 
 void	print_error(const char *err)

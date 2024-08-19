@@ -113,4 +113,5 @@ int				input_check_valid_number(const char *str);
 long			input_atoi_long(const char *str);
 void			init_supervisor(t_supervisor *super);
 t_bool			check_dinner_over(t_philo *philo);
+t_bool			check_error(t_philo *philo);
 #endif
