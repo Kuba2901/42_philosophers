@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:11:36 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/19 19:33:34 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/20 16:29:36 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ long	*_loop(t_supervisor *super, int i, long	*full_philos)
             pthread_mutex_lock(&super->dead_lock);
             printf("%ld %ld died\n", get_runtime_in_ms(philo), philo->index);
             super->error = TRUE;
-			pthread_mutex_unlock(&super->write_lock);
+			// pthread_mutex_unlock(&super->write_lock);
             pthread_mutex_unlock(&super->dead_lock);
             return (NULL);
         }
@@ -63,7 +63,7 @@ void	*supervisor_routine(t_supervisor *super)
 			super->error = TRUE;
 			pthread_mutex_unlock(&super->dead_lock);
 			pthread_mutex_unlock(&super->dinner_over_lock);
-			pthread_mutex_unlock(&super->write_lock);
+			// pthread_mutex_unlock(&super->write_lock);
 			printf("Dinner is over\n");
 			break ;
 		}
