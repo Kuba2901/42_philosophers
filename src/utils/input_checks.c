@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:14:23 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/17 17:18:18 by jnenczak         ###   ########.fr       */
+/*   Updated: 2024/08/18 20:14:33 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	assign_number_of_philo(t_supervisor *super, char *str)
 {
 	long	ret;
 
-	ret = custom_atoi_long(str);
+	ret = input_atoi_long(str);
 	if (ret < 1)
 	{
 		print_error("The number of philosophers has to be > 0");
@@ -29,10 +29,10 @@ static void	assign_time_to_eat(t_supervisor *super, char *str)
 {
 	long	ret;
 
-	ret = custom_atoi_long(str);
+	ret = input_atoi_long(str);
 	if (ret < 1)
 	{
-		print_error("The time to eat > 1");
+		print_error("The time to eat has to be >= 1");
 		super->error = TRUE;
 	}
 	super->time_to_eat = ret;
@@ -42,7 +42,7 @@ static void	assign_time_to_sleep(t_supervisor *super, char *str)
 {
 	long	ret;
 
-	ret = custom_atoi_long(str);
+	ret = input_atoi_long(str);
 	if (ret < 0)
 	{
 		print_error("The number of philosophers has to be >= 0");
@@ -55,7 +55,7 @@ static void	assign_time_to_die(t_supervisor *super, char *str)
 {
 	long	ret;
 
-	ret = custom_atoi_long(str);
+	ret = input_atoi_long(str);
 	if (ret < 1)
 	{
 		print_error("The time to die has to be > 0");

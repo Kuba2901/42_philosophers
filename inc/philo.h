@@ -7,6 +7,18 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <limits.h>
+#define RESET_COLOR "\033[0m"
+#define GREEN_COLOR "\033[32m"
+#define YELLOW_COLOR "\033[33m"
+#define CYAN_COLOR "\033[36m"
+#define RED_COLOR "\033[31m"
+#define BLUE_COLOR "\033[34m"
+#define THINKING_EMOJI "🤔"
+#define EATING_EMOJI "🍝"
+#define FORK_EMOJI "🍴"
+#define SLEEPING_EMOJI "😴"
+#define DIED_EMOJI "💀"
+#define PREETY_PRINT FALSE
 
 typedef enum s_bool
 {
@@ -78,21 +90,28 @@ void			print_philo_state(t_philo *philo);
 void			print_error(const char *err);
 void			free_resources(t_supervisor *supervisor);
 t_supervisor	*parse_input(int ac, char **av);
-long			custom_atoi_long(const char *str);
+long			input_atoi_long(const char *str);
 void			init_supervisor_numbers(t_supervisor *super, char **av);
 t_philo			**init_philos(t_supervisor *super);
 t_fork			**init_forks(t_supervisor *super);
 void			free_until(void **elem, int i);
 struct timeval	get_sim_runtime(struct timeval start);
-void			assign_forks_to_philos(t_supervisor *super);
-void			eat(t_philo *philo);
-void			think(t_philo *philo);
-void			philo_sleep(t_philo *philo);
-void			put_down_forks(t_philo *philo);
-void			pick_up_forks(t_philo *philo);
+void			assign_forks(t_supervisor *super);
+void			action_eat(t_philo *philo);
+void			action_think(t_philo *philo);
+void			action_sleep(t_philo *philo);
+void			action_put_down_forks(t_philo *philo);
+void			action_pick_up_forks(t_philo *philo);
 unsigned long	get_sim_runtime_milliseconds(struct timeval simulation_start);
 unsigned long	get_time_since_last_meal(t_philo *philo);
 int				ft_usleep(unsigned long milliseconds);
 unsigned long	ft_get_current_time(void);
 unsigned long	get_runtime_in_ms(t_philo *philo);
+int				input_check_empty(const char *str);
+long			input_strtol(const char *str, char **endptr);
+int				input_check_valid_number(const char *str);
+long			input_atoi_long(const char *str);
+void			init_supervisor(t_supervisor *super);
+t_bool			check_dinner_over(t_philo *philo);
+t_bool			check_error(t_philo *philo);
 #endif
