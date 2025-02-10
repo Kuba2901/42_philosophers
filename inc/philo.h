@@ -43,12 +43,12 @@ typedef struct s_fork
 
 typedef struct s_philo
 {
-	long			meals_eaten; // The number of meals the philosopher has consumed so far
-	long			index; // Starting with 1
-	long			last_sleep; // TS Since the beginning of last sleeping session
-	long			last_thinking; // TS Since the beginning of last thinking session
-	long			last_meal; // TS Since the beginning of last eating session
-	t_activity		activity; // Current philosopher activity
+	long			meals_eaten;
+	long			index;
+	long			last_sleep;
+	long			last_thinking;
+	long			last_meal;
+	t_activity		activity;
 	pthread_t		thread;
 	t_fork			*left;
 	t_fork			*right;

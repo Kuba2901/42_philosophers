@@ -107,7 +107,7 @@ t_supervisor	*init(int ac, char **av)
 	super = NULL;
 	super = parse_input(ac, av);
 	super->forks = init_forks(super);
-	super->sim_start = 0;
+	super->error = FALSE;
 	if (super->forks == NULL)
 	{
 		free_resources(super);
@@ -120,7 +120,15 @@ t_supervisor	*init(int ac, char **av)
 		exit(1);
 	}
 	assign_forks(super);
-	super->sim_start = ft_get_current_time();
+	super->sim_start = ft_get_current_time(); // Set actual start time
+
+	// Initialize each philo's last_meal and simulation_start before creating threads
+	int i = -1;
+	while (++i < super->number_of_philo)
+	{
+		super->philos[i]->last_meal = super->sim_start;
+		super->philos[i]->simulation_start = &super->sim_start;
+	}
 	return (super);
 }
 
@@ -135,12 +143,9 @@ int	main(int ac, char **av)
 		pthread_create(&super->philos[i]->thread, NULL,
 			(void *)philo_routine, super->philos[i]);
 	pthread_create(&super->thread, NULL, (void *)supervisor_routine, super);
-	i = -1;
-	while (++i < super->number_of_philo)
-	{
-		super->philos[i]->last_meal = super->sim_start;
-		super->philos[i]->simulation_start = &super->sim_start;
-	}
+
+	// Remove the loop that sets last_meal here; it's now done in init()
+
 	i = -1;
 	while (++i < super->number_of_philo)
 		pthread_join(super->philos[i]->thread, NULL);

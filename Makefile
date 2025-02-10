@@ -3,7 +3,7 @@ SRC = main.c src/utils/utils.c src/utils/input.c src/utils/actions.c src/utils/i
 OBJ = $(SRC:.c=.o)
 INC = -Iinc/
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -pthread  # Add -pthread here
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 
 %.o: %.c
@@ -12,7 +12,7 @@ RM = rm -rf
 $(NAME): $(OBJ)
 	@$(CC) $(OBJ) -o $(NAME) -pthread
 
-all: $(NAME)
+all: $(NAME)	
 
 clean:
 	$(RM) $(OBJ)

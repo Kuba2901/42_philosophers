@@ -26,6 +26,7 @@ static t_philo	*init_single_philo(int i)
 	ret->index = i + 1;
 	ret->meals_eaten = 0;
 	ret->is_full = FALSE;
+	ret->error = FALSE;
 	return (ret);
 }
 
@@ -44,6 +45,8 @@ static void	init_single_philo_pointers(t_supervisor *super, t_philo *philo)
 	philo->dead_lock = &super->dead_lock;
 	philo->error = &super->error;
 	philo->dinner_over = &super->dinner_over;
+	philo->last_sleep = super->sim_start;
+	philo->last_thinking = super->sim_start;
 }
 
 t_philo	**init_philos(t_supervisor *super)
