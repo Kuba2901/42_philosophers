@@ -3,14 +3,14 @@ SRC = main.c src/utils/utils.c src/utils/input.c src/utils/actions.c src/utils/i
 OBJ = $(SRC:.c=.o)
 INC = -Iinc/
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -pthread  # Add -pthread here
 RM = rm -rf
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INC) -O3 -c $< -o $@
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME)
+	@$(CC) $(OBJ) -o $(NAME) -pthread
 
 all: $(NAME)
 

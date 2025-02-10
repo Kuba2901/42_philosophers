@@ -64,7 +64,7 @@ void	*supervisor_routine(t_supervisor *super)
 			pthread_mutex_unlock(&super->dead_lock);
 			pthread_mutex_unlock(&super->dinner_over_lock);
 			// pthread_mutex_unlock(&super->write_lock);
-			printf("Dinner is over\n");
+			printf("Dinner is over\n"); // TODO: Bug - segfault after this
 			break ;
 		}
 		usleep(100);
