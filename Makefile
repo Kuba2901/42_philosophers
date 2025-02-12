@@ -11,7 +11,6 @@ RM = rm -rf
 
 $(NAME): $(OBJ)
 	@$(CC) $(OBJ) -o $(NAME) -pthread
-
 all: $(NAME)	
 
 clean:

@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:07:11 by jnenczak          #+#    #+#             */
-/*   Updated: 2025/02/12 17:18:04 by jnenczak         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:18:21 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ void	free_resources(t_supervisor *supervisor)
 		pthread_mutex_destroy(&supervisor->write_lock);
 		pthread_mutex_destroy(&supervisor->dead_lock);
 		pthread_mutex_destroy(&supervisor->dinner_over_lock);
+		pthread_detach(supervisor->thread);
 		free(supervisor);
 	}
 }

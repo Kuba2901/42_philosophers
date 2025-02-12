@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 19:52:05 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/18 20:20:20 by jnenczak         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:45:42 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static t_philo	*init_single_philo(int i)
 	ret->activity = THINKING;
 	ret->index = i + 1;
 	ret->meals_eaten = 0;
-	ret->is_full = FALSE;
-	ret->error = FALSE;
+	ret->is_full = 0;
+	ret->error = 0;
 	return (ret);
 }
 
