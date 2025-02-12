@@ -110,7 +110,7 @@ void	free_resources(t_supervisor *supervisor)
 			while (++i < supervisor->number_of_philo)
 			{
 				pthread_mutex_destroy(&supervisor->philos[i]->edit_lock);
-				pthread_detach(supervisor->philos[i]->thread);
+				// pthread_detach(supervisor->philos[i]->thread);
 			}
 		}
 		free_until((void **)supervisor->forks, supervisor->number_of_philo);
