@@ -1,24 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/12 13:19:11 by jnenczak          #+#    #+#             */
+/*   Updated: 2025/02/12 16:14:32 by jnenczak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
-#include <string.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <sys/time.h>
-#include <stdlib.h>
-#include <limits.h>
-#define RESET_COLOR "\033[0m"
-#define GREEN_COLOR "\033[32m"
-#define YELLOW_COLOR "\033[33m"
-#define CYAN_COLOR "\033[36m"
-#define RED_COLOR "\033[31m"
-#define BLUE_COLOR "\033[34m"
-#define THINKING_EMOJI "🤔"
-#define EATING_EMOJI "🍝"
-#define FORK_EMOJI "🍴"
-#define SLEEPING_EMOJI "😴"
-#define DIED_EMOJI "💀"
-#define PREETY_PRINT FALSE
+# include <string.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <pthread.h>
+# include <sys/time.h>
+# include <stdlib.h>
+# include <limits.h>
+# define RESET_COLOR "\033[0m"
+# define GREEN_COLOR "\033[32m"
+# define YELLOW_COLOR "\033[33m"
+# define CYAN_COLOR "\033[36m"
+# define RED_COLOR "\033[31m"
+# define BLUE_COLOR "\033[34m"
+# define THINKING_EMOJI "🤔"
+# define EATING_EMOJI "🍝"
+# define FORK_EMOJI "🍴"
+# define SLEEPING_EMOJI "😴"
+# define DIED_EMOJI "💀"
+# define PREETY_PRINT TRUE
 
 typedef enum s_bool
 {
@@ -43,12 +55,12 @@ typedef struct s_fork
 
 typedef struct s_philo
 {
-	long			meals_eaten; // The number of meals the philosopher has consumed so far
-	long			index; // Starting with 1
-	long			last_sleep; // TS Since the beginning of last sleeping session
-	long			last_thinking; // TS Since the beginning of last thinking session
-	long			last_meal; // TS Since the beginning of last eating session
-	t_activity		activity; // Current philosopher activity
+	long			meals_eaten;
+	long			index;
+	long			last_sleep;
+	long			last_thinking;
+	long			last_meal;
+	t_activity		activity;
 	pthread_t		thread;
 	t_fork			*left;
 	t_fork			*right;
@@ -57,7 +69,7 @@ typedef struct s_philo
 	long			*time_to_eat;
 	long			*time_to_sleep;
 	long			*number_of_meals_to_eat;
-	unsigned long	*simulation_start; 
+	unsigned long	*simulation_start;
 	t_bool			is_full;
 	t_bool			*error;
 	t_bool			*dinner_over;
@@ -69,13 +81,13 @@ typedef struct s_philo
 
 typedef struct s_supervisor
 {
-	unsigned long	sim_start; // TS of sim start
-	long			number_of_philo; // Total number of philosophers
-	long			time_to_die; // The max time between meals (or the beginning of the simulation and the first meal)
-	long			time_to_eat; // The time it takes the philosopher to eat
-	long			time_to_sleep; // The time it takes the philosopher to sleep
-	long			number_of_meals; // The number of meals each philosopher has to eat before the end of simulation (-1 means INF)
-	t_philo			**philos; // Pointer to an array of philosophers
+	unsigned long	sim_start;
+	long			number_of_philo;
+	long			time_to_die;
+	long			time_to_eat;
+	long			time_to_sleep;
+	long			number_of_meals;
+	t_philo			**philos;
 	t_fork			**forks;
 	pthread_t		thread;
 	t_bool			error;
@@ -114,4 +126,5 @@ long			input_atoi_long(const char *str);
 void			init_supervisor(t_supervisor *super);
 t_bool			check_dinner_over(t_philo *philo);
 t_bool			check_error(t_philo *philo);
+void			*supervisor_routine(t_supervisor *super);
 #endif

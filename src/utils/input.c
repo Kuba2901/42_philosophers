@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 19:19:18 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/20 15:00:48 by jnenczak         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:21:46 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,9 @@ void	init_supervisor(t_supervisor *super)
 	super->time_to_die = 0;
 	super->time_to_eat = 0;
 	super->time_to_sleep = 0;
+	super->error = FALSE;
+	super->sim_start = 0;
+	super->dinner_over = FALSE;
 	pthread_mutex_init(&super->dead_lock, NULL);
 	pthread_mutex_init(&super->write_lock, NULL);
 	pthread_mutex_init(&super->dinner_over_lock, NULL);
