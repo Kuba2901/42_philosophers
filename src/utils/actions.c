@@ -6,7 +6,7 @@
 /*   By: jnenczak <jnenczak@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 20:00:29 by jnenczak          #+#    #+#             */
-/*   Updated: 2024/08/19 18:08:37 by jnenczak         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:57:18 by jnenczak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	exit_process(t_philo *philo)
 	{
 		pthread_mutex_unlock(&philo->left->lock);
 		pthread_mutex_unlock(&philo->right->lock);
-	}	
+	}
 }
 
 void	action_pick_up_forks(t_philo *philo)
@@ -65,16 +65,4 @@ void	action_think(t_philo *philo)
 {
 	philo->activity = THINKING;
 	print_philo_state(philo);
-}
-
-void	action_eat(t_philo *philo)
-{
-	philo->activity = EATING;
-	philo->last_meal = ft_get_current_time();
-	print_philo_state(philo);
-	ft_usleep(*philo->time_to_eat);
-	philo->meals_eaten++;
-	if (*philo->number_of_meals_to_eat && \
-			philo->meals_eaten >= *philo->number_of_meals_to_eat)
-		philo->is_full = TRUE;
 }
